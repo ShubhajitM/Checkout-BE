@@ -6,20 +6,22 @@ import { AppleTvPricingRule } from "./pricing_rules/appleTvPricingRule";
 import { SuperIpadPricingRule } from "./pricing_rules/superIpadPricingRule";
 
 const pricingRuleList: PricingRule[] = [];
-loadPricingRules(pricingRuleList);
+
+const loadPricingRules = () => {
+    pricingRuleList.push(new AppleTvPricingRule())
+    pricingRuleList.push(new SuperIpadPricingRule())
+}
+
+loadPricingRules();
 
 const ck = new CheckOutImpl(pricingRuleList);
 
-ck.scan(new Item(Sku.atv));
-ck.scan(new Item(Sku.ipd));
-ck.scan(new Item(Sku.ipd));
-ck.scan(new Item(Sku.atv));
-ck.scan(new Item(Sku.ipd));
-ck.scan(new Item(Sku.ipd));
-ck.scan(new Item(Sku.ipd));
-console.log(ck.total());
+ck.scanSku('atv');
+ck.scanSku('ipd');
+ck.scanSku('ipd');
+ck.scanSku('atv');
+ck.scanSku('ipd');
+ck.scanSku('ipd');
+ck.scanSku('ipd');
 
-function loadPricingRules(ruleList: PricingRule[]) {
-    ruleList.push(new AppleTvPricingRule())
-    ruleList.push(new SuperIpadPricingRule())
-}
+console.log(ck.total());

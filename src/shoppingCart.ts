@@ -1,6 +1,7 @@
 import { Sku } from "./model/sku";
 import { ItemPricingMap } from "./itemPricingMap";
 import { Item } from "./model/item";
+import { ItemInventory } from "./itemInventory";
 
 export class ShoppingCart {
   private readonly checkOutList: Map<Sku, number>;
@@ -13,6 +14,30 @@ export class ShoppingCart {
     this.totalDiscount = 0.00;
   }
 
+  clone(): ShoppingCart {
+    const clone = new ShoppingCart();
+
+    // Copy the map
+    this.checkOutList.forEach((quantity, sku) => {
+      clone.checkOutList.set(sku, quantity);
+    });
+
+    // Copy the prices
+    clone.totalPrice = this.totalPrice;
+    clone.totalDiscount = this.totalDiscount;
+
+    return clone;
+  }
+
+  reduceProductCount = () => {
+    const input: { sku: Sku; count: number }[] = [];
+    this.checkOutList.forEach((quantity, sku) => {
+      input.push({ sku, count: quantity });
+    });
+    ItemInventory.reduceProductCount(input);
+  }
+
+  
   public getItemCountInCart(sku: Sku): number {
     return this.checkOutList.get(sku) || 0;
   }
