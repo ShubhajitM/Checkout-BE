@@ -4,12 +4,14 @@ import { PricingRule } from "./pricing_rules/pricingRule";
 import { CheckOutImpl } from "./checkout/checkOutImpl";
 import { AppleTvPricingRule } from "./pricing_rules/appleTvPricingRule";
 import { SuperIpadPricingRule } from "./pricing_rules/superIpadPricingRule";
+import { MacbookProFreeVgaPricingRule } from "./pricing_rules/macbookProFreeVgaPricingRule";
 
 const pricingRuleList: PricingRule[] = [];
 
 const loadPricingRules = () => {
     pricingRuleList.push(new AppleTvPricingRule())
     pricingRuleList.push(new SuperIpadPricingRule())
+    pricingRuleList.push(new MacbookProFreeVgaPricingRule())
 }
 
 loadPricingRules();
