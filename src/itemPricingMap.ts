@@ -6,7 +6,7 @@ export class ItemPricingMap {
     [Sku.mbp, 1399.99],
     [Sku.atv, 109.50],
     [Sku.vga, 30.00],
-    [Sku.hpd, 200.00]
+    [Sku.hpd, 205.50]
   ]);
 
   public static getPriceOfItem(sku: Sku): number {
