@@ -23,16 +23,13 @@ export class CatalogService {
           map.set(sku, { price: rec.price, quantity: rec.quantity });
         }
       });
+      if (map.size === 0) {
+        throw new Error('No valid catalog items found in catalogItems.json');
+      }
       this.catalogMap = map;
       this.initialized = true;
     } catch (e) {
-      this.catalogMap = new Map<Sku, CatalogRecord>([
-        [Sku.ipd, { price: 549.99, quantity: 1000 }],
-        [Sku.mbp, { price: 1399.99, quantity: 1000 }],
-        [Sku.atv, { price: 109.5, quantity: 1000 }],
-        [Sku.vga, { price: 30, quantity: 1000 }],
-      ]);
-      this.initialized = true;
+      throw new Error(`Failed to load catalog items: ${(e as Error).message}`);
     }
   }
 
