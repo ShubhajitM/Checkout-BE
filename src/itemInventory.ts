@@ -1,16 +1,10 @@
 import { Sku } from './model/sku';
+import { CatalogService } from './catalog/catalogService';
 
 class ItemInventory {
-  //default intialization
-  private static itemInventoryMap: Map<Sku, number> = new Map([
-    [Sku.ipd, 1000],
-    [Sku.mbp, 1000],
-    [Sku.atv, 1000],
-    [Sku.vga, 1000],
-  ]);
 
   public static checkIfProductAvailable(sku: Sku): boolean {
-    return (this.itemInventoryMap.get(sku) ?? 0) > 0;
+    return CatalogService.getQuantity(sku) > 0;
   }
 
   public static reduceProductCount(input: {sku: Sku, count: number}[]): void {
@@ -21,12 +15,7 @@ class ItemInventory {
   }
 
   static reduceItemCount(sku: Sku, count: number): void {
-    const currentCount = this.itemInventoryMap.get(sku) ?? 0;
-    if (currentCount >= count) {
-      this.itemInventoryMap.set(sku, currentCount - count);
-    } else {
-      throw new Error(`Insufficient stock for SKU: ${sku}`);
-    }
+    CatalogService.reduceQuantity(sku, count);
   }
 
 }

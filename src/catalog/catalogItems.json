@@ -1,0 +1,6 @@
+{
+  "ipd": { "price": 549.99, "quantity": 1000 },
+  "mbp": { "price": 1399.99, "quantity": 1000 },
+  "atv": { "price": 109.5, "quantity": 1000 },
+  "vga": { "price": 30, "quantity": 1000 }
+}
