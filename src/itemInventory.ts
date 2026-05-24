@@ -1,7 +1,6 @@
 import { Sku } from './model/sku';
 
 class ItemInventory {
-  //default intialization
   private static itemInventoryMap: Map<Sku, number> = new Map([
     [Sku.ipd, 1000],
     [Sku.mbp, 1000],
@@ -9,12 +8,16 @@ class ItemInventory {
     [Sku.vga, 1000],
   ]);
 
+  public static setInventory(map: Map<Sku, number>): void {
+    this.itemInventoryMap = new Map(map);
+  }
+
   public static checkIfProductAvailable(sku: Sku): boolean {
     return (this.itemInventoryMap.get(sku) ?? 0) > 0;
   }
 
-  public static reduceProductCount(input: {sku: Sku, count: number}[]): void {
-    input.forEach(record => {
+  public static reduceProductCount(input: { sku: Sku; count: number }[]): void {
+    input.forEach((record) => {
       const { sku, count } = record;
       this.reduceItemCount(sku, count);
     });
@@ -28,7 +31,6 @@ class ItemInventory {
       throw new Error(`Insufficient stock for SKU: ${sku}`);
     }
   }
-
 }
 
 export { ItemInventory };

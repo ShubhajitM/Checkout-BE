@@ -5,10 +5,14 @@ export class ItemPricingMap {
     [Sku.ipd, 549.99],
     [Sku.mbp, 1399.99],
     [Sku.atv, 109.50],
-    [Sku.vga, 30.00]
+    [Sku.vga, 30.00],
   ]);
 
+  public static setPrices(map: Map<Sku, number>): void {
+    this.map = new Map(map);
+  }
+
   public static getPriceOfItem(sku: Sku): number {
-    return this.map.get(sku) ?? 0.00;
+    return this.map.get(sku) ?? 0.0;
   }
 }
