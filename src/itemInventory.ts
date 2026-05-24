@@ -7,6 +7,7 @@ class ItemInventory {
     [Sku.mbp, 1000],
     [Sku.atv, 1000],
     [Sku.vga, 1000],
+    [Sku.hpd, 1000],
   ]);
 
   public static checkIfProductAvailable(sku: Sku): boolean {
