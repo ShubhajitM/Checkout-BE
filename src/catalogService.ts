@@ -16,8 +16,13 @@ export class CatalogService {
       ? path.resolve(catalogFilePath)
       : path.resolve(__dirname, 'catalog', 'catalog.json');
 
-    const fileContent = fs.readFileSync(filePath, { encoding: 'utf-8' });
-    const data: unknown = JSON.parse(fileContent);
+    let data: unknown;
+    try {
+      const fileContent = fs.readFileSync(filePath, { encoding: 'utf-8' });
+      data = JSON.parse(fileContent);
+    } catch (err) {
+      throw new Error(`Failed to load catalog from ${filePath}: ${(err as Error).message}`);
+    }
 
     if (!Array.isArray(data)) {
       throw new Error('Catalog JSON must be an array of items');
@@ -31,8 +36,8 @@ export class CatalogService {
       if (!item || typeof item.sku !== 'string') {
         throw new Error(`Catalog item at index ${index} is missing a valid sku`);
       }
-      if (typeof item.price !== 'number' || Number.isNaN(item.price)) {
-        throw new Error(`Catalog item ${item.sku} has invalid price`);
+      if (typeof item.price !== 'number' || Number.isNaN(item.price) || item.price < 0) {
+        throw new Error(`Catalog item ${item.sku} has invalid price (must be a non-negative number)`);
       }
       if (typeof item.inventory !== 'number' || !Number.isInteger(item.inventory) || item.inventory < 0) {
         throw new Error(`Catalog item ${item.sku} has invalid inventory`);

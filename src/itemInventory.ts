@@ -10,7 +10,12 @@ class ItemInventory {
 
   public static initializeInventory(input: { sku: Sku; count: number }[]): void {
     const newMap = new Map<Sku, number>();
-    input.forEach(({ sku, count }) => newMap.set(sku, count));
+    input.forEach(({ sku, count }) => {
+      if (!Number.isInteger(count) || count < 0) {
+        throw new Error(`Invalid inventory count for ${sku}: ${count}`);
+      }
+      newMap.set(sku, count);
+    });
     this.itemInventoryMap = newMap;
   }
 

@@ -14,7 +14,12 @@ export class ItemPricingMap {
 
   public static setPrices(prices: { sku: Sku; price: number }[]): void {
     const newMap = new Map<Sku, number>();
-    prices.forEach(({ sku, price }) => newMap.set(sku, price));
+    prices.forEach(({ sku, price }) => {
+      if (typeof price !== 'number' || Number.isNaN(price) || price < 0) {
+        throw new Error(`Invalid price for ${String(sku)}: ${price}`);
+      }
+      newMap.set(sku, price);
+    });
     this.map = newMap;
   }
 }
