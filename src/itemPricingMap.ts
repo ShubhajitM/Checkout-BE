@@ -11,4 +11,10 @@ export class ItemPricingMap {
   public static getPriceOfItem(sku: Sku): number {
     return this.map.get(sku) ?? 0.00;
   }
+
+  public static setPrices(prices: { sku: Sku; price: number }[]): void {
+    const newMap = new Map<Sku, number>();
+    prices.forEach(({ sku, price }) => newMap.set(sku, price));
+    this.map = newMap;
+  }
 }

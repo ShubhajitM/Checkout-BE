@@ -1,0 +1,6 @@
+[
+  { "sku": "ipd", "price": 549.99, "inventory": 1000 },
+  { "sku": "mbp", "price": 1399.99, "inventory": 1000 },
+  { "sku": "atv", "price": 109.5, "inventory": 1000 },
+  { "sku": "vga", "price": 30.0, "inventory": 1000 }
+]
