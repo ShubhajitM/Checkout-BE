@@ -11,7 +11,12 @@ const loadPricingRules = () => {
     pricingRuleList.push(new SuperIpadPricingRule())
 }
 
-CatalogService.loadCatalog();
+try {
+  CatalogService.loadCatalog();
+} catch (err) {
+  console.error('Failed to load product catalog:', err);
+  throw err;
+}
 loadPricingRules();
 
 const ck = new CheckOutImpl(pricingRuleList);

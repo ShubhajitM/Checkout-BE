@@ -18,23 +18,35 @@ export class CatalogService {
 
   public static loadCatalog(): void {
     if (this.initialized) return;
-    const filePath = path.join(__dirname, 'catalog.json');
-    const raw = readFileSync(filePath, { encoding: 'utf-8' });
-    const json: CatalogJson = JSON.parse(raw);
 
-    json.items.forEach((item) => {
-      const key = item.sku as keyof typeof Sku;
-      if (Sku[key]) {
-        const sku = Sku[key];
-        this.catalogMap.set(sku, {
+    const configuredPath = process.env.CATALOG_PATH;
+    const filePath = configuredPath && configuredPath.trim().length > 0
+      ? configuredPath
+      : path.resolve(process.cwd(), 'src', 'catalog', 'catalog.json');
+
+    try {
+      const raw = readFileSync(filePath, { encoding: 'utf-8' });
+      const json: CatalogJson = JSON.parse(raw);
+
+      json.items.forEach((item) => {
+        const isValidSku = Object.values(Sku).includes(item.sku as Sku);
+        if (!isValidSku) {
+          return;
+        }
+        if (item.price < 0 || item.quantity < 0) {
+          return;
+        }
+        this.catalogMap.set(item.sku as Sku, {
           name: item.name,
           price: item.price,
           quantity: item.quantity,
         });
-      }
-    });
+      });
 
-    this.initialized = true;
+      this.initialized = true;
+    } catch (err) {
+      throw new Error(`Failed to load catalog from ${filePath}: ${(err as Error).message}`);
+    }
   }
 
   public static getPrice(sku: Sku): number {
@@ -50,19 +62,27 @@ export class CatalogService {
   }
 
   public static reduceProductCount(input: { sku: Sku; count: number }[]): void {
-    input.forEach(({ sku, count }) => {
+    const aggregated = new Map<Sku, number>();
+    for (const { sku, count } of input) {
+      if (count <= 0) {
+        throw new Error(`Invalid count for SKU: ${sku}. Count must be > 0`);
+      }
+      aggregated.set(sku, (aggregated.get(sku) ?? 0) + count);
+    }
+
+    for (const [sku, total] of aggregated.entries()) {
       const current = this.getAvailableCount(sku);
-      if (current < count) {
+      if (current < total) {
         throw new Error(`Insufficient stock for SKU: ${sku}`);
       }
-    });
+    }
 
-    input.forEach(({ sku, count }) => {
+    for (const [sku, total] of aggregated.entries()) {
       const record = this.catalogMap.get(sku);
       if (record) {
-        record.quantity = record.quantity - count;
+        record.quantity -= total;
         this.catalogMap.set(sku, record);
       }
-    });
+    }
   }
 }
