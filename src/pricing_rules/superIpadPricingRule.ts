@@ -2,6 +2,7 @@ import { ItemPricingMap } from "../itemPricingMap";
 import { ShoppingCart } from "../shoppingCart";
 import { Sku } from "../model/sku";
 import { PricingRule } from "./pricingRule";
+import { PricingRuleRegistry } from "./pricingRuleRegistry";
 
 export class SuperIpadPricingRule implements PricingRule{
     apply(shoppingCart: ShoppingCart): number {
@@ -12,3 +13,5 @@ export class SuperIpadPricingRule implements PricingRule{
         return 0.00;
     }
 }
+
+PricingRuleRegistry.register(new SuperIpadPricingRule());

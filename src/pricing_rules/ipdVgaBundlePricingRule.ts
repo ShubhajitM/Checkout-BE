@@ -2,6 +2,7 @@ import { PricingRule } from "./pricingRule";
 import { ShoppingCart } from "../shoppingCart";
 import { Sku } from "../model/sku";
 import { ItemPricingMap } from "../itemPricingMap";
+import { PricingRuleRegistry } from "./pricingRuleRegistry";
 
 export class IpdVgaBundlePricingRule implements PricingRule {
   apply(shoppingCart: ShoppingCart): number {
@@ -11,3 +12,5 @@ export class IpdVgaBundlePricingRule implements PricingRule {
     return ItemPricingMap.getPriceOfItem(Sku.vga) * eligibleFreeVga;
   }
 }
+
+PricingRuleRegistry.register(new IpdVgaBundlePricingRule());

@@ -2,6 +2,7 @@ import { PricingRule } from "./pricingRule";
 import { ShoppingCart } from "../shoppingCart";
 import { Sku } from "../model/sku";
 import { ItemPricingMap } from "../itemPricingMap";
+import { PricingRuleRegistry } from "./pricingRuleRegistry";
 
 export class AppleTvPricingRule implements PricingRule {
   apply(shoppingCart: ShoppingCart): number {
@@ -10,3 +11,5 @@ export class AppleTvPricingRule implements PricingRule {
     return ItemPricingMap.getPriceOfItem(Sku.atv) * freeItems;
   }
 }
+
+PricingRuleRegistry.register(new AppleTvPricingRule());
