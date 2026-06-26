@@ -2,6 +2,7 @@ import { Sku } from "./model/sku";
 import { ItemPricingMap } from "./itemPricingMap";
 import { Item } from "./model/item";
 import { ItemInventory } from "./itemInventory";
+import { ItemJsonDb } from "./db/itemJsonDb";
 
 export class ShoppingCart {
   private readonly checkOutList: Map<Sku, number>;
@@ -45,6 +46,7 @@ export class ShoppingCart {
   public addItemInCart(item: Item): void {
     const quantity = this.checkOutList.get(item.getSku()) || 0;
     this.checkOutList.set(item.getSku(), quantity + 1);
+    ItemJsonDb.getInstance().addItem(item.getSku());
   }
 
   public getTotalPrice(): number {
