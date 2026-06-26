@@ -1,14 +1,10 @@
 import { Sku } from "./model/sku";
+import { PricingDb } from "./db/pricingDb";
 
 export class ItemPricingMap {
-  private static map = new Map<Sku, number>([
-    [Sku.ipd, 549.99],
-    [Sku.mbp, 1399.99],
-    [Sku.atv, 109.50],
-    [Sku.vga, 30.00]
-  ]);
+  private static readonly db = new PricingDb();
 
   public static getPriceOfItem(sku: Sku): number {
-    return this.map.get(sku) ?? 0.00;
+    return this.db.getPrice(sku);
   }
 }
